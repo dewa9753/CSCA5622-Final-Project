@@ -116,7 +116,6 @@ if __name__ == '__main__':
 
     if not os.path.exists(CLEAN_DATA_ROOT + 'results_clean.csv'):
         df = get_original_data('results.csv')
-        df = df[df['rank'] != r'\N'] # drop rows where rank is '\N'
         create_clean_data(
             df,
             ['number', 'positionText', 'positionOrder'],
