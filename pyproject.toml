@@ -6,5 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "jupyterlab>=4.4.9",
+    "kaggle>=1.7.4.5",
+    "kagglehub>=0.3.13",
     "scikit-learn>=1.7.2",
 ]
