@@ -1,0 +1,3 @@
+ORIGINAL_DATA_ROOT = 'data_original/'
+CLEAN_DATA_ROOT = 'data/'
+MIN_YEAR = 2020
