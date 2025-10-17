@@ -8,6 +8,8 @@ dependencies = [
     "jupyterlab>=4.4.9",
     "kaggle>=1.7.4.5",
     "kagglehub>=0.3.13",
+    "np>=1.0.2",
+    "numpy>=2.2.6",
     "pandas>=2.3.3",
     "scikit-learn>=1.7.2",
 ]

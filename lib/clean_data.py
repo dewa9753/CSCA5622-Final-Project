@@ -49,7 +49,7 @@ if __name__ == '__main__':
         df = get_original_data('constructor_standings.csv')
         create_clean_data(
             df,
-            ['positionText'],
+            ['positionText', 'constructorStandingsId'],
             'constructor_standings_clean.csv'
         )
     
@@ -59,7 +59,7 @@ if __name__ == '__main__':
         df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
-            ['url', 'nationality'],
+            ['url', 'nationality', 'constructorRef'],
             'constructors_clean.csv'
         )
     
@@ -89,13 +89,12 @@ if __name__ == '__main__':
         new_col_names = {
             'position': 'positionInLap',
             'lap': 'lapNumber',
-            'time': 'lapTime',
             'milliseconds': 'lapMilliseconds'
         }
         df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
-            [],
+            ['time'],
             'lap_times_clean.csv'
         )
     
@@ -104,13 +103,12 @@ if __name__ == '__main__':
         new_col_names = {
             'stop': 'stopNumber',
             'lap': 'stopLap',
-            'duration': 'stopSeconds',
             'milliseconds': 'stopMilliseconds'
         }
         df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
-            ['time'],
+            ['time', 'duration'],
             'pit_stops_clean.csv'
         )
 
@@ -122,7 +120,7 @@ if __name__ == '__main__':
         df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
-            ['qualifyId'],
+            ['qualifyId', 'number'],
             'qualifying_clean.csv'
     )
         
@@ -130,7 +128,11 @@ if __name__ == '__main__':
         df = get_original_data('races.csv')
         create_clean_data(
             df,
-            ['url', 'time', 'name', 'fp1_date', 'fp1_time', 'fp2_date', 'fp2_time', 'fp3_date', 'fp3_time', 'quali_date', 'quali_time', 'sprint_date', 'sprint_time'],
+            ['url', 'time', 'name', 
+             'date', 'round', 'fp1_date', 
+             'fp1_time', 'fp2_date', 'fp2_time', 
+             'fp3_date', 'fp3_time', 'quali_date', 
+             'quali_time', 'sprint_date', 'sprint_time'],
             'races_clean.csv'
         )
 
@@ -146,15 +148,21 @@ if __name__ == '__main__':
         df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
-            ['resultId', 'number', 'positionText', 'positionOrder'],
+            ['resultId', 'number', 'positionText', 'positionOrder', 'rank', 'finalTime'],
             'results_clean.csv'
         )
 
     if not os.path.exists(settings.DATA_ROOT + '/sprint_results_clean.csv'):
         df = get_original_data('sprint_results.csv')
+        new_col_names = {
+            'time': 'finalSprintTime',
+            'milliseconds': 'finalSprintMilliseconds',
+            'position': 'finalSprintPosition'
+        }
+        df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
-            ['number', 'positionText', 'positionOrder'],
+            ['number', 'positionText', 'positionOrder', 'grid', 'laps', 'rank'],
             'sprint_results_clean.csv'
         )
 

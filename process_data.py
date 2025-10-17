@@ -14,7 +14,7 @@ if __name__ == "__main__":
         result = subprocess.run(command_and_args, capture_output=True, text=True, check=True)
         print(result.stdout)
 
-        command_and_args[1] = 'lib/consolidate_data.py'
+        command_and_args[1] = 'lib/create_final_data.py'
         result = subprocess.run(command_and_args, capture_output=True, text=True, check=True)
         print(result.stdout)
     except subprocess.CalledProcessError as e:

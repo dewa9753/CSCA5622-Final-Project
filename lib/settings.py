@@ -3,6 +3,7 @@
 DATA_NAME = 'jtrotman/formula-1-race-data'
 ORIGINAL_DATA_ROOT = 'data_original'
 DATA_ROOT = 'data'
+MODELS_ROOT = 'model'
 
 ## DATA SETTINGS
-MIN_YEAR = 2020
+MODEL_NAME = 'model_final_position'
