@@ -1,1 +1,0 @@
-print("consolidate data.py executed")

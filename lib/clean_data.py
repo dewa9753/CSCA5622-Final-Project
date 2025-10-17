@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 import sys
-import lib.settings as settings
+import settings
 
 ## functions
 def get_original_data(file_name):
