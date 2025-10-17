@@ -22,6 +22,10 @@ if __name__ == '__main__':
         final_df = dfs['results'].copy()
         final_df.rename(columns={'finalMilliseconds': 'finalTime'}, inplace=True)
 
+        # map circuitId to raceId
+        circuit_race_map = dfs['races'][['raceId', 'circuitId']]
+        final_df = final_df.merge(circuit_race_map, on='raceId', how='left')
+
         # insert q1,q2,q3 columns from qualifying data
         qualifying_times_df = dfs['qualifying']
         qualifying_times_df.drop(columns=['qualifyingPosition'], inplace=True)
@@ -44,6 +48,10 @@ if __name__ == '__main__':
         results_df['fastestLapTime'] = pd.to_timedelta(results_df['fastestLapTime']).dt.total_seconds()*1000
         results_df.rename(columns={'fastestLapTime': 'prevFastestLapTime'}, inplace=True)
         final_df = final_df.merge(results_df[['raceId', 'driverId', 'prevFastestLapTime']], on=['raceId', 'driverId'], how='left')
+
+        final_df['prevPoints'] = final_df.groupby('driverId')['points'].shift(1)
+        final_df['prevPoints'].fillna(final_df['prevPoints'].mean(), inplace=True)
+        final_df['prevPoints'] = final_df['prevPoints'].astype('int64')
 
 
 

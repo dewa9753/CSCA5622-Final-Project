@@ -10,10 +10,9 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import GridSearchCV
 
 def cv_hyperparameters(X, y):
-    print(y.value_counts())
     # kind of randomly chose the grid to search over
     grid = {
-        'n_estimators': list(np.arange(50, 200, 10)),
+        'n_estimators': list(np.arange(50, 500, 50)),
         'max_depth': [None] + list(np.arange(1, 50, 5)), # unlimited depth may be the best, who knows
         'min_samples_split': list(np.arange(5, 20, 2)),
     }
@@ -71,6 +70,8 @@ if __name__ == '__main__':
 
         print("Tuning hyperparameters...")
         best_params = cv_hyperparameters(X_train, y_train)
+
+        print(f"Found the best parameters: {best_params}")
 
         print("Training model...")
         model = train_model(X_train, y_train, best_params)
