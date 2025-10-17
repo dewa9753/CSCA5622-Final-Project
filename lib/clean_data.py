@@ -2,52 +2,50 @@ import pandas as pd
 import numpy as np
 import os
 import sys
+import shutil
 import settings
 
 ## functions
 def get_original_data(file_name):
-    df = pd.read_csv(settings.ORIGINAL_DATA_ROOT + file_name)
+    df = pd.read_csv(f'{settings.ORIGINAL_DATA_ROOT}/{file_name}')
     df.replace(to_replace=r'\N', value=np.nan, inplace=True)
     return df
 
 def create_clean_data(df, columns_to_drop, output_file_name):
     df_cleaned = df.drop(columns_to_drop, axis=1)
     df_cleaned = df_cleaned.dropna()
-    df_cleaned.to_csv(settings.CLEAN_DATA_ROOT + output_file_name, index=False)
-    print(f'Cleaned {output_file_name} and created {settings.CLEAN_DATA_ROOT + output_file_name}')
+    df_cleaned.to_csv(f'{settings.DATA_ROOT}/{output_file_name}', index=False)
+    print(f'Cleaned {output_file_name} and created {settings.DATA_ROOT}/{output_file_name}')
 
 ## clean data if not already cleaned
 if __name__ == '__main__':
+    if len(sys.argv) > 1 and '--force-clean' in sys.argv:
+        if os.path.exists(settings.DATA_ROOT+'/'):
+            shutil.rmtree(settings.DATA_ROOT+'/')
+            print(f'Force cleaning: removed \'{settings.DATA_ROOT}\' directory to re-clean the data.')
 
-    # check for --force argument to re-clean data
-    if len(sys.argv) > 1:
-        if sys.argv[1] == '--force':
-            if os.path.exists(settings.CLEAN_DATA_ROOT):
-                import shutil
-                shutil.rmtree(settings.CLEAN_DATA_ROOT)
-                print(f'Force cleaning: removed \'{settings.CLEAN_DATA_ROOT}\' directory to re-clean the data.')
+    if not os.path.exists(settings.DATA_ROOT):
+        os.makedirs(settings.DATA_ROOT)
 
-    # create clean root directory if it doesn't exist
-    if not os.path.exists(settings.CLEAN_DATA_ROOT):
-        os.makedirs(settings.CLEAN_DATA_ROOT)
-
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'circuits_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/circuits_clean.csv'):
         df = get_original_data('circuits.csv')
+        new_col_names = {'name': 'circuitName'}
+        df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
             ['url', 'circuitRef', 'lat', 'lng', 'alt', 'location', 'country'],
             'circuits_clean.csv'
         )
     
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'constructor_results_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/constructor_results_clean.csv'):
         df = get_original_data('constructor_results.csv')
         create_clean_data(    
             df,
-            [],
+            ['status'],
             'constructor_results_clean.csv'
         )
     
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'constructor_standings_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/constructor_standings_clean.csv'):
         df = get_original_data('constructor_standings.csv')
         create_clean_data(
             df,
@@ -55,15 +53,17 @@ if __name__ == '__main__':
             'constructor_standings_clean.csv'
         )
     
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'constructors_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/constructors_clean.csv'):
         df = get_original_data('constructors.csv')
+        new_col_names = {'name': 'constructorName'}
+        df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
             ['url', 'nationality'],
             'constructors_clean.csv'
         )
     
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'drivers_standings_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/drivers_standings_clean.csv'):
         df = get_original_data('driver_standings.csv')
         create_clean_data(
             df,
@@ -71,23 +71,35 @@ if __name__ == '__main__':
             'drivers_standings_clean.csv'
         )
 
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'drivers_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/drivers_clean.csv'):
         df = get_original_data('drivers.csv')
+        new_col_names = {
+            'forename': 'driverForename',
+            'surname': 'driverSurname'
+        }
+        df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
             ['driverRef', 'number', 'code', 'url', 'dob', 'nationality'],
             'drivers_clean.csv'
         )
 
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'lap_times_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/lap_times_clean.csv'):
         df = get_original_data('lap_times.csv')
+        new_col_names = {
+            'position': 'positionInLap',
+            'lap': 'lapNumber',
+            'time': 'lapTime',
+            'milliseconds': 'lap_milliseconds'
+        }
+        df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
             [],
             'lap_times_clean.csv'
         )
     
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'pit_stops_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/pit_stops_clean.csv'):
         df = get_original_data('pit_stops.csv')
         create_clean_data(
             df,
@@ -95,15 +107,19 @@ if __name__ == '__main__':
             'pit_stops_clean.csv'
         )
 
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'qualifying_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/qualifying_clean.csv'):
         df = get_original_data('qualifying.csv')
+        new_col_names = {
+            'position': 'qualifyingPosition'
+        }
+        df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
-            [],
+            ['qualifyId'],
             'qualifying_clean.csv'
     )
         
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'races_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/races_clean.csv'):
         df = get_original_data('races.csv')
         create_clean_data(
             df,
@@ -111,15 +127,20 @@ if __name__ == '__main__':
             'races_clean.csv'
         )
 
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'results_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/results_clean.csv'):
         df = get_original_data('results.csv')
+        new_col_names = {
+            'time': 'final_time',
+            'milliseconds': 'final_milliseconds'
+        }
+        df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
-            ['number', 'positionText', 'positionOrder'],
+            ['resultId', 'number', 'positionText', 'positionOrder'],
             'results_clean.csv'
         )
 
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'sprint_results_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/sprint_results_clean.csv'):
         df = get_original_data('sprint_results.csv')
         create_clean_data(
             df,
@@ -127,8 +148,12 @@ if __name__ == '__main__':
             'sprint_results_clean.csv'
         )
 
-    if not os.path.exists(settings.CLEAN_DATA_ROOT + 'status_clean.csv'):
+    if not os.path.exists(settings.DATA_ROOT + '/status_clean.csv'):
         df = get_original_data('status.csv')
+        new_col_names = {
+            'status': 'statusText'
+        }
+        df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
             [],
