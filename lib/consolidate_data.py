@@ -30,7 +30,7 @@ def save_data(df, output_filename, force=False):
     try:
         if force or (not force and not os.path.exists(form_data_path(output_filename))):
             df.to_csv(form_data_path(output_filename), index=False)
-            print(f"Consolidated data saved to {output_filename}.csv")
+            print(f"Consolidated data saved to {form_data_path(output_filename)}")
     except Exception as e:
         print(f"Error saving consolidated data: {e}")
 
@@ -63,8 +63,11 @@ reference_data_column_order = [
 ]
 
 training_data_column_order = [
-    'year', 'raceId', 'driverId', 'constructorId', 'lapNumber', 'positionInLap', 'lapTime', 'lapMilliseconds',
-    'qualifyingPosition', 'q1', 'q2', 'q3'
+    'raceId', 'driverId', 'constructorId',
+    'lapNumber', 'positionInLap', 'lapTime', 'lapMilliseconds',
+    'qualifyingPosition', 'q1', 'q2', 'q3',
+    'totalLaps', 'gridPosition', 'finalPosition', 'finalTime', 'finalMilliseconds',
+    'stopNumber', 'stopLap', 'stopSeconds', 'stopMilliseconds',
 ]
 
 
@@ -78,23 +81,28 @@ if __name__ == "__main__":
         reference_data_paths,
         reference_data_column_order
     )
-    if(type(ref_df) != type(None) and ref_df.empty == False):
-        save_data(
-            ref_df,
-            'reference_data',
-            should_force
-        )
+    save_data(
+        ref_df,
+        'reference_data',
+        should_force
+    )
     
-    """
-    # consolidate useful data
+    # consolidate training data
     training_df = consolidate_data(
         training_data_paths,
         training_data_column_order
     )
-    if(training_df.empty == False):
-        save_data(
-            training_df,
-            'training_data',
-            should_force
-        )
-    """
+    save_data(
+        training_df,
+        'training_data',
+        should_force
+    )
+
+    # print heads of dataframes
+    if type(ref_df) != type(None):
+        print("Reference Data Head:")
+        print(ref_df.head())
+    
+    if type(training_df) != type(None):
+        print("Training Data Head:")
+        print(training_df.head())

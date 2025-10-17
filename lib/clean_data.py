@@ -90,7 +90,7 @@ if __name__ == '__main__':
             'position': 'positionInLap',
             'lap': 'lapNumber',
             'time': 'lapTime',
-            'milliseconds': 'lap_milliseconds'
+            'milliseconds': 'lapMilliseconds'
         }
         df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
@@ -101,6 +101,13 @@ if __name__ == '__main__':
     
     if not os.path.exists(settings.DATA_ROOT + '/pit_stops_clean.csv'):
         df = get_original_data('pit_stops.csv')
+        new_col_names = {
+            'stop': 'stopNumber',
+            'lap': 'stopLap',
+            'duration': 'stopSeconds',
+            'milliseconds': 'stopMilliseconds'
+        }
+        df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
             df,
             ['time'],
@@ -130,8 +137,11 @@ if __name__ == '__main__':
     if not os.path.exists(settings.DATA_ROOT + '/results_clean.csv'):
         df = get_original_data('results.csv')
         new_col_names = {
-            'time': 'final_time',
-            'milliseconds': 'final_milliseconds'
+            'time': 'finalTime',
+            'milliseconds': 'finalMilliseconds',
+            'position': 'finalPosition',
+            'grid': 'gridPosition',
+            'laps': 'totalLaps'
         }
         df.rename(columns=new_col_names, inplace=True)
         create_clean_data(
