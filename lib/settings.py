@@ -9,3 +9,5 @@ MODEL_ROOT = 'model'
 MODEL_NAME = 'model_final_position'
 RANDOM_STATE = 7
 TEST_SIZE = 0.2
+CV_FOLD = 5
+N_JOBS = -1
