@@ -13,6 +13,10 @@ if __name__ == '__main__':
     sns.pairplot(df, vars=['q1','q2','q3', 'prevFinalTime', 'prevFastestLapTime'], hue='finalPosition')
     plt.show()
 
+    print("Plotting prevFinalTime vs finalPosition")
+    sns.scatterplot(data=df, x='finalPosition', y='prevFinalTime')
+    plt.show()
+
     print("Showing histogram plot of finalPosition vs constructorPosition")
     sns.histplot(df, x='constructorPosition', y='finalPosition')
     plt.show()
@@ -37,9 +41,12 @@ if __name__ == '__main__':
     plt.show()
 
 
-    # EDA showed that q3 is the best choice and that all the q features are highly correlated
+    # EDA showed that q3 is the best choice out of the q features, and that all the q features are highly correlated to each other
     # constructorPosition and finalPosition are also correlated enough to be useful
-    # prevFinalTime is not useful because it is weakly correlated with finalPosition
-    # prevFastestLapTime is also weakly correlated, but I think it is appropriate to keep it
-    # driverId is totally uncorrelated to finalPosition apparently
-    print("Based on the EDA, selected features are: constructorId, constructorPosition, gridPosition, q3, prevFastestLapTime")
+    # prevFinalTime is not useful because it is uncorrelated with finalPosition
+    # prevFastestLapTime is highly correlated with q3
+    # driverId is weakly correlated with finalPosition and everything else, but I think I'll keep it since we don't have many features
+    print("Based on the EDA, selected features are: driverId, constructorId, constructorPosition, gridPosition, q3")
+    df = df[['driverId', 'constructorId', 'constructorPosition', 'gridPosition', 'q3', 'finalPosition']]
+    df.to_csv(f'{DATA_ROOT}/final_data.csv', index=False)
+    print("Updated final_data.csv with only selected features.")
