@@ -33,8 +33,19 @@ if __name__ == '__main__':
         qualifying_times_df['q3'] = (pd.to_timedelta(qualifying_times_df['q3']).dt.total_seconds()*1000).astype('int64')
         final_df = final_df.merge(qualifying_times_df, on=['raceId', 'driverId', 'constructorId'], how='left')
 
-        # add average numerical features for each driver
-        
+
+        # add previous race numerical statistics
+        final_df['prevFinalTime'] = final_df.groupby('driverId')['finalTime'].shift(1)
+        final_df['prevFinalTime'].fillna(final_df['prevFinalTime'].mean(), inplace=True)
+        final_df['prevFinalTime'] = final_df['prevFinalTime'].astype('int64')
+
+        results_df = dfs['results']
+        results_df['fastestLapTime'] = results_df['fastestLapTime'].apply(lambda x: '00:' + x if pd.notna(x) else x)
+        results_df['fastestLapTime'] = pd.to_timedelta(results_df['fastestLapTime']).dt.total_seconds()*1000
+        results_df.rename(columns={'fastestLapTime': 'prevFastestLapTime'}, inplace=True)
+        final_df = final_df.merge(results_df[['raceId', 'driverId', 'prevFastestLapTime']], on=['raceId', 'driverId'], how='left')
+
+
 
         # insert constructor standing
         constructor_standings_df = dfs['constructor_standings']
