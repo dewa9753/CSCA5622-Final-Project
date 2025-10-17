@@ -25,10 +25,12 @@ if __name__ == '__main__':
         # insert q1,q2,q3 columns from qualifying data
         qualifying_times_df = dfs['qualifying']
         qualifying_times_df.drop(columns=['qualifyingPosition'], inplace=True)
-        qualifying_times_df[['q1', 'q2', 'q3']] = qualifying_times_df[['q1', 'q2', 'q3']].applymap(lambda x: '00:' + x)
-        qualifying_times_df['q1'] = (pd.to_timedelta(qualifying_times_df['q1']).dt.seconds*1000).astype('int64')
-        qualifying_times_df['q2'] = (pd.to_timedelta(qualifying_times_df['q2']).dt.seconds*1000).astype('int64')
-        qualifying_times_df['q3'] = (pd.to_timedelta(qualifying_times_df['q3']).dt.seconds*1000).astype('int64')
+        qualifying_times_df['q1'] = qualifying_times_df['q1'].apply(lambda x: '00:' + x if pd.notna(x) else x)
+        qualifying_times_df['q2'] = qualifying_times_df['q2'].apply(lambda x: '00:' + x if pd.notna(x) else x)
+        qualifying_times_df['q3'] = qualifying_times_df['q3'].apply(lambda x: '00:' + x if pd.notna(x) else x)
+        qualifying_times_df['q1'] = (pd.to_timedelta(qualifying_times_df['q1']).dt.total_seconds()*1000).astype('int64')
+        qualifying_times_df['q2'] = (pd.to_timedelta(qualifying_times_df['q2']).dt.total_seconds()*1000).astype('int64')
+        qualifying_times_df['q3'] = (pd.to_timedelta(qualifying_times_df['q3']).dt.total_seconds()*1000).astype('int64')
         final_df = final_df.merge(qualifying_times_df, on=['raceId', 'driverId', 'constructorId'], how='left')
 
         # insert constructor standing
