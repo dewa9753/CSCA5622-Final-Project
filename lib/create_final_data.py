@@ -33,6 +33,9 @@ if __name__ == '__main__':
         qualifying_times_df['q3'] = (pd.to_timedelta(qualifying_times_df['q3']).dt.total_seconds()*1000).astype('int64')
         final_df = final_df.merge(qualifying_times_df, on=['raceId', 'driverId', 'constructorId'], how='left')
 
+        # add average numerical features for each driver
+        
+
         # insert constructor standing
         constructor_standings_df = dfs['constructor_standings']
         constructor_standings_df.rename(columns={'position': 'constructorPosition'}, inplace=True)
