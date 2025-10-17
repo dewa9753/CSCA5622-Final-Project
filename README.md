@@ -1,5 +1,15 @@
 # CSCA5622-Final-Project
 
-This project will solve a supervised learning problem using a large Formula 1 dataset; Formula 1 is a type of motorsport notorious for gathering lots of data.
-The goal of this project is to predict {MANY THINGS} from this data using a good selection of features determined thorough standard EDA.
-The first part of the project solves a classification problem while the second part solves regression problem using the same dataset.
+This project is about analyzing a Formula 1 dataset to predict certain outcomes of future races using supervised learning.
+
+Problem statement: Predict the winner of a race without knowing the qualifying results with a test accuracy of above 90%.
+
+Brief description of how the project works:
+    - lib/settings.py:
+        - global constants module that can be used to configure the entire process from importing data to analyzing the results
+    - process_data.py:
+        - runs 3 subprocesses: lib/import_data.py, lib/clean_data.py, and lib/consolidate_data.py
+        - this combines all the useful data into one .csv file for ease of use during model creation and testing
+    - get_results.py:
+        - runs 2 subprocesses: lib/train_models.py, lib/test_models.py
+        - it will also analyze the predictions from the output of lib/make_predictions.py and print the results out neatly
