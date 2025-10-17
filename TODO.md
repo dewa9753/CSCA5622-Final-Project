@@ -1,6 +1,6 @@
 # Project To-do List
 
-- [ ] Determine how much of the data I can use to predict things about future races. (aka MIN_YEAR)
+- [ ] Determine how much of the data I can use to predict things about future races. (aka set MIN_YEAR)
     - [ ] Clean the data such that only what I need is in each dataset
 - [ ] Figure out the problem statements. What am I going to predict through regression/classification?
     - Look at all the data determine which features I need from which files
