@@ -6,7 +6,7 @@ import numpy as np
 import joblib
 from lib.settings import MODEL_ROOT, DATA_ROOT, MODEL_NAME, RANDOM_STATE, TEST_SIZE, CV_FOLD, N_JOBS
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import GridSearchCV
 
 def cv_hyperparameters(X, y):
@@ -77,8 +77,11 @@ if __name__ == '__main__':
         model = train_model(X_train, y_train, best_params)
 
         # test model
-        score = test_model(model, X_test, y_test)
-        print(f'Model test accuracy: {score}')
+        acc = test_model(model, X_test, y_test)
+        print(f'Model test accuracy: {acc}')
+        f1 = f1_score(y_test, model.predict(X_test), average='weighted')
+        print(f'Model test F1 score: {f1}')
+
 
         # ask if the user wants to save the model
         print("Would you like to save this model? (y/n): ")
